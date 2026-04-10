@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    /* Configurações Básicas */
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "rootDir": "./",
+
+    /* Interoperabilidade (Isso resolve o erro do Express!) */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    /* Qualidade de Código */
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Para evitar erros com Node e Express */
+    "types": ["node", "express"]
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
+}
