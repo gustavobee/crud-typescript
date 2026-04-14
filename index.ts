@@ -1,21 +1,53 @@
-import express from 'express';
+import {
+  selectBooks,
+  selectBook,
+  insertBook,
+  updateBook,
+  deleteBook,
+} from "./books.js";
+import express from "express";
+
 const app = express();
 app.use(express.json());
 
-const books: string[] = [];
+app.get("/books", async (req, res) => {
+  const books = await selectBooks();
+  res.status(200).json(books);
+});
 
-app.post('/books', (req, res) => {
-    books.push(req.body);
-    res.send('Ok post');
-})
+app.get("/books/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
 
-app.get('/books', (req, res) => {
-    res.json(books);
-})
+  if (isNaN(id)) {
+    return res
+      .status(400)
+      .json({ error: "O ID precisa ser um número válido." });
+  }
 
-app.delete('/books', (req, res) => {
-    books.pop();
-    res.send('Ok delete');
-})
+  const book = await selectBook(id);
+
+  if (!book) {
+    return res.status(404).json({ error: "Livro não encontrado." });
+  }
+
+  res.status(200).json(book);
+});
+
+app.post("/books", async (req, res) => {
+  await insertBook(req.body);
+  res.sendStatus(201);
+});
+
+app.put("/books/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  await updateBook(id, req.body);
+  res.sendStatus(200);
+});
+
+app.delete("/books/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  await deleteBook(id);
+  res.sendStatus(204);
+});
 
 app.listen(3000);
