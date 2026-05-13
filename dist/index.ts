@@ -4,10 +4,10 @@ import {
   insertBook,
   updateBook,
   deleteBook,
-} from "./books.js";
+} from "../books.js";
 import express from "express";
 
-import publisherRoutes from "./routes/publisherRoutes.js";
+import publisherRoutes from "../routes/publisherRoutes.js";
 
 const app = express();
 app.use(express.json());
