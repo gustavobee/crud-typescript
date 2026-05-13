@@ -5,7 +5,7 @@ import {
   insertPublisher,
   updatePublisher,
   deletePublisher,
-} from "../publisher.js";
+} from "../src/publisher.js";
 
 const router = Router();
 

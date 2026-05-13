@@ -4,7 +4,7 @@ import {
   insertBook,
   updateBook,
   deleteBook,
-} from "../books.js";
+} from "./books.js";
 import express from "express";
 
 import publisherRoutes from "../routes/publisherRoutes.js";
