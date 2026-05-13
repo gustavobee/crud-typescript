@@ -6,11 +6,14 @@ interface Book {
   autor: string;
   isbn: string;
   anoPublicacao: number;
+  publisher_id: number;
 }
 
 export async function selectBooks() {
   try {
-    const result = await database.query("SELECT * FROM books;");
+    const result = await database.query(
+      "SELECT books.*, publisher.nome AS editora_nome, publisher.pais AS editora_pais FROM books INNER JOIN publisher ON books.publisher_id = publisher.id;",
+    );
     return result.rows;
   } catch (error) {
     console.error("Erro ao encontrar livros: " + error);
@@ -21,7 +24,7 @@ export async function selectBooks() {
 export async function selectBook(id: number) {
   try {
     const query = {
-      text: "SELECT * FROM books WHERE id = $1;",
+      text: "SELECT books.*, publisher.nome AS editora_nome, publisher.pais AS editora_pais FROM books INNER JOIN publisher ON books.publisher_id = publisher.id WHERE books.id = $1;",
       values: [id],
     };
     const result = await database.query(query);
@@ -35,8 +38,14 @@ export async function selectBook(id: number) {
 export async function insertBook(book: Book) {
   try {
     const query = {
-      text: "INSERT INTO books (titulo, autor, isbn, ano_publicacao) VALUES ($1, $2, $3, $4) RETURNING *",
-      values: [book.titulo, book.autor, book.isbn, book.anoPublicacao],
+      text: "INSERT INTO books (titulo, autor, isbn, ano_publicacao, publisher_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      values: [
+        book.titulo,
+        book.autor,
+        book.isbn,
+        book.anoPublicacao,
+        book.publisher_id,
+      ],
     };
     const result = await database.query(query);
     return result.rows[0];
@@ -49,8 +58,15 @@ export async function insertBook(book: Book) {
 export async function updateBook(id: number, book: Book) {
   try {
     const query = {
-      text: "UPDATE books SET titulo=$1, autor=$2, isbn=$3, ano_publicacao=$4 where id=$5;",
-      values: [book.titulo, book.autor, book.isbn, book.anoPublicacao, id],
+      text: "UPDATE books SET titulo=$1, autor=$2, isbn=$3, ano_publicacao=$4, publisher_id=$5 where id=$6 RETURNING *;",
+      values: [
+        book.titulo,
+        book.autor,
+        book.isbn,
+        book.anoPublicacao,
+        book.publisher_id,
+        id,
+      ],
     };
     const result = await database.query(query);
     return result.rows[0];

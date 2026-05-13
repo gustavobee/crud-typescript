@@ -7,8 +7,11 @@ import {
 } from "./books.js";
 import express from "express";
 
+import publisherRoutes from "./routes/publisherRoutes.js";
+
 const app = express();
 app.use(express.json());
+app.use("/publishers", publisherRoutes);
 
 // GET
 app.get("/books", async (req, res) => {
